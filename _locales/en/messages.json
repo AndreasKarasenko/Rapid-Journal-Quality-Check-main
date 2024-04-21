@@ -1,0 +1,10 @@
+{
+   "extDesc": {
+      "description": "Extension description.",
+      "message": "Displays rankings and h-index for academic journals next to Google Scholar search results."
+   },
+   "extName": {
+      "description": "Extension name.",
+      "message": "Rapid Journal Quality Check"
+   }
+}

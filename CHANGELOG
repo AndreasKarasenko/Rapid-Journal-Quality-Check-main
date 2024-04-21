@@ -1,0 +1,9 @@
+changed the chrome specific calls to firefox.
+changed the manifest.json value for "background"
+    firefox does not support background.sevice_worker
+    instead uses background.scripts
+
+removed keys from manifest.json that don't exist in firefox's mdn v3
+
+for more information contact me at
+andreas.karasenko@uni-bayreuth.de
