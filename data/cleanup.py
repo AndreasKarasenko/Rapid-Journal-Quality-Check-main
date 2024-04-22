@@ -1,9 +1,9 @@
 # Test string
-# test_string = """"   NA  NA  NA  NA  NA  NA  NA  NA  NA  NA   1  NA  NA  NA  NA  NA  NA  NA   \\n" + 
-# " GRH  NA  NA  NA  3  NA  B  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  '@GRH \\n" + 
-# " ASIANCONFERENCEONMACHINELEARNING  NA  NA  NA  NA  NA  NA  NA  NA  NA  C  NA  NA  NA  NA  NA  NA  NA  NA   Asian Conference on Machine Learning \\n" + 
-# " INFORMATIONRETRIEVALFACILITYCONFERENCE  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA   1  NA  NA  NA  NA  NA  NA  NA   Information Retrieval Facility Conference \\n" + 
-# " INTERNATIONALCONFERENCEONADVANCEDCOMMUNICATIONSCOMPUTATION  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA   International Conference on Advanced Communications and Computation \\n" + 
+# test_string = """"   NA  NA  NA  NA  NA  NA  NA  NA  NA  NA   1  NA  NA  NA  NA  NA  NA  NA   \\n" +
+# " GRH  NA  NA  NA  3  NA  B  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  '@GRH \\n" +
+# " ASIANCONFERENCEONMACHINELEARNING  NA  NA  NA  NA  NA  NA  NA  NA  NA  C  NA  NA  NA  NA  NA  NA  NA  NA   Asian Conference on Machine Learning \\n" +
+# " INFORMATIONRETRIEVALFACILITYCONFERENCE  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA   1  NA  NA  NA  NA  NA  NA  NA   Information Retrieval Facility Conference \\n" +
+# " INTERNATIONALCONFERENCEONADVANCEDCOMMUNICATIONSCOMPUTATION  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA   International Conference on Advanced Communications and Computation \\n" +
 # """
 import pandas as pd
 
@@ -17,10 +17,31 @@ for i in range(len(test)):
     test[i] = test[i].rstrip(' \\n"+\n')
     test[i] = test[i].strip("'")
     # Split the string into items
-    test[i] = test[i].split('\t')
+    test[i] = test[i].split("\t")
 
-test[0].insert(0, '')
-columns = ["NamesShort", "SJR_Q", "SJR_Hi", "VHB", "FNEGE", "CoNRS", "HCERES", "CORE", "source", "CORE_c", "CCF", "DAEN", "AJG", "JCR", "SNIP", "SJR", "CiteSc", "ABDC", "FT50", "NamesFull"]
+test[0].insert(0, "")
+columns = [
+    "NS",  # NamesShort
+    "SJR_Q",
+    "SJR_Hi",
+    "VHB",
+    "FNEGE",
+    "CoNRS",
+    "HCERES",
+    "CORE",
+    "source",
+    "CORE_c",
+    "CCF",
+    "DAEN",
+    "AJG",
+    "JCR",
+    "SNIP",
+    "SJR",
+    "CiteSc",
+    "ABDC",
+    "FT50",
+    "NF",  # NamesFull
+]
 
 ### option 1 create a dict of dict
 
@@ -29,27 +50,39 @@ df.to_csv("Names.csv", index=False)
 dff = pd.read_csv("Names.csv", na_values="NA")
 dff.to_csv("Names2.csv", index=False)
 
-# set the index of the dataframe to the NamesShort column
-dff.set_index("NamesShort", inplace=True)
+# set the index of the dataframe to the NS column
+dff.set_index("NS", inplace=True)
 dff.fillna("", inplace=True)
 # create a dictionary using the index as the key
-dd = dff.to_dict(orient="index") # allow O(1) lookup
+dd = dff.to_dict(orient="index")  # allow O(1) lookup
 # dump the file to json
-import json
-import re
-# Dump the dictionary to a JSON file
-def saveFile(dictionary, fileName):
-    jsonStr = json.dumps(dictionary, ensure_ascii=False);
-    removeQuotes = re.sub("\"([^\"]+)\":", r"\1:", jsonStr);
-    fileNameCleaned = fileName.split(" ")[0]
-        
-    with open(fileNameCleaned + ".ts", "w",encoding='utf_8') as outfile:
-        outfile.write("export const " + fileNameCleaned + " = " + removeQuotes + ";")
+from utils.save_file import saveFile
 
-saveFile(dd, "Names_test")        
+# Dump the dictionary to a JSON file
+
+
+saveFile(dd, "Names_test")
 # with open("Names.json", "w", encoding="UTF-8") as f:
 #     json.dump(dd, f, ensure_ascii=False)
 
 ### option 2 create a dict of list
-dd = dff.transpose().to_dict(orient="list") # allow O(1) lookup
-saveFile(dd, "Names_test2") # saves 5MB of space but still needs to be simpliefied somehow
+dd = dff.transpose().to_dict(orient="list")  # allow O(1) lookup
+saveFile(
+    dd, "Names_test2"
+)  # saves about 5MB of space but still needs to be simpliefied somehow to be less than 4MB
+
+### simplification option 1
+# remove NF column (needed but can be added in sperate file)
+dff.drop(columns=["NF"], inplace=True)
+dd = dff.transpose().to_dict(orient="list")  # allow O(1) lookup
+saveFile(dd, "Names_test3")
+
+### simplification option 2
+# create a dict for each column, so that we have
+# JOURNALOFRETAILING: {"VHB": A}
+# JOURNALOFRETAILING: {"ABDC": A*}
+# ....
+# this produces files with size ~1.4MB
+for i in range(dff.shape[-1]):
+    dd = dff.iloc[:, i].to_dict()
+    saveFile(dd, f"{columns[i+1]}")
