@@ -9,34 +9,6 @@ from typing import List
 
 import pandas as pd
 
-
-def read_file(file: str, columns: List[str]):
-    """Reads one of the base files and returns a DataFrame"""
-    file = open(file, "r", encoding="ISO-8859-1")
-    file = file.readlines()
-    for i in range(len(file)):
-        # Remove leading whitespace, double quote, and tab
-        file[i] = file[i].lstrip(' "\t')
-        # Remove trailing whitespace, newline character, double quote, space, plus sign, and tab
-        file[i] = file[i].rstrip(' \\n"+\n')
-        file[i] = file[i].strip("'")
-        # Split the string into items
-        file[i] = file[i].split("\t")
-
-
-file = open("Names.txt", "r", encoding="ISO-8859-1")
-test = file.readlines()
-# Split the string into lines
-for i in range(len(test)):
-    # Remove leading whitespace, double quote, and tab
-    test[i] = test[i].lstrip(' "\t')
-    # Remove trailing whitespace, newline character, double quote, space, plus sign, and tab
-    test[i] = test[i].rstrip(' \\n"+\n')
-    test[i] = test[i].strip("'")
-    # Split the string into items
-    test[i] = test[i].split("\t")
-
-test[0].insert(0, "")
 columns = [
     "NS",  # NamesShort
     "SJR_Q",
@@ -60,50 +32,128 @@ columns = [
     "NF",  # NamesFull
 ]
 
-### option 1 create a dict of dict
 
-df = pd.DataFrame(test, columns=columns)
+def read_names(file: str):
+    """Read the base Names.txt file and return a DataFrame"""
+    columns = [
+        "NS",  # NamesShort
+        "SJR_Q",
+        "SJR_Hi",
+        "VHB",
+        "FNEGE",
+        "CoNRS",
+        "HCERES",
+        "CORE",
+        "source",
+        "CORE_c",
+        "CCF",
+        "DAEN",
+        "AJG",
+        "JCR",
+        "SNIP",
+        "SJR",
+        "CiteSc",
+        "ABDC",
+        "FT50",
+        "NF",  # NamesFull
+    ]
+    file = open(file, "r", encoding="ISO-8859-1")
+    file = file.readlines()
+    for i in range(len(file)):
+        # Remove leading whitespace, double quote, and tab
+        file[i] = file[i].lstrip(' "\t')
+        # Remove trailing whitespace, newline character, double quote, space, plus sign, and tab
+        file[i] = file[i].rstrip(' \\n"+\n')
+        file[i] = file[i].strip("'")
+        # Split the string into items
+        file[i] = file[i].split("\t")
+    file[0].insert(0, "")
+    df = pd.DataFrame(file, columns=columns)
+    df = df.map(lambda x: x.strip() if isinstance(x, str) else x)
+    return df
+
+
+df = read_names("Names.txt")
 df.to_csv("Names.csv", index=False)
-dff = pd.read_csv("Names.csv", na_values="NA")
-dff.to_csv("Names2.csv", index=False)
+df.replace("NA", "", inplace=True)
 
-# set the index of the dataframe to the NS column
-dff.set_index("NS", inplace=True)
-dff.fillna("", inplace=True)
-# create a dictionary using the index as the key
-dd = dff.to_dict(orient="index")  # allow O(1) lookup
-# dump the file to json
+# if you want to read from saved file
+# df = pd.read_csv("Names.csv", keep_default_na=False)
+# df.replace("NA", "", inplace=True)
+
+df.set_index("NS", inplace=True)
 from utils.save_file import saveFile
 
-# Dump the dictionary to a JSON file
-
-
-saveFile(dd, "Names_test")
-# with open("Names.json", "w", encoding="UTF-8") as f:
-#     json.dump(dd, f, ensure_ascii=False)
-
-### option 2 create a dict of list
-dd = dff.transpose().to_dict(orient="list")  # allow O(1) lookup
-saveFile(
-    dd, "Names_test2"
-)  # saves about 5MB of space but still needs to be simpliefied somehow to be less than 4MB
-
-### simplification option 1
-# remove NF column (needed but can be added in sperate file)
-dff.drop(columns=["NF"], inplace=True)
-dd = dff.transpose().to_dict(orient="list")  # allow O(1) lookup
-saveFile(dd, "Names_test3")
-
-### simplification option 2
-# create a dict for each column, so that we have
-# JOURNALOFRETAILING: {"VHB": A}
-# JOURNALOFRETAILING: {"ABDC": A*}
-# ....
 # this produces files with size ~1.4MB
-for i in range(dff.shape[-1]):
-    dd = dff.iloc[:, i].to_dict()
+for i in range(df.shape[-1]):
+    dd = df.iloc[:, i].to_dict()
     saveFile(dd, f"{columns[i+1]}")
 
 
-def create_mapping():
-    raise NotImplementedError("Not implemented yet")
+# TODO currently trainling n at NAME level is cut off in the output file
+### repeat for ISSNs
+def read_issns(file: str):
+    file = open(file, "r", encoding="ISO-8859-1")
+    file = file.readlines()
+    columns = [
+        "ISSN",
+        "SJR_Q",
+        "SJR_H",
+        "VHB",
+        "FNEGE",
+        "CoNRS",
+        "HCERE",
+        "CORE",
+        "sourc",
+        "DAEN",
+        "AJG",
+        "JCR",
+        "SNIP",
+        "SJR",
+        "CiteS",
+        "ABDC",
+        "NF",
+    ]
+    for i in range(len(file)):
+        # Remove leading whitespace, double quote, and tab
+        file[i] = file[i].lstrip(' "\t')
+        # Remove trailing whitespace, newline character, double quote, space, plus sign, and tab
+        file[i] = file[i].rstrip(' \\n"+\n')
+        file[i] = file[i].strip("'")
+        # Split the string into items
+        file[i] = file[i].split("\t")
+    df = pd.DataFrame(file, columns=columns)
+    df = df.map(lambda x: x.strip() if isinstance(x, str) else x)
+    return df
+
+
+columns = [
+    "ISSN",
+    "SJR_Q",
+    "SJR_H",
+    "VHB",
+    "FNEGE",
+    "CoNRS",
+    "HCERE",
+    "CORE",
+    "sourc",
+    "DAEN",
+    "AJG",
+    "JCR",
+    "SNIP",
+    "SJR",
+    "CiteS",
+    "ABDC",
+    "NF",
+]
+
+
+df = read_issns("ISSNs.txt")
+df.to_csv("ISSNs.csv", index=False)
+df.replace("NA", "", inplace=True)
+
+# TODO fix this so it saves to data/issns/ and gives it a proper name without collision.
+df.set_index("ISSN", inplace=True)
+for i in range(df.shape[-1]):
+    dd = df.iloc[:, i].to_dict()
+    saveFile(dd, f"{columns[i+1]}")
