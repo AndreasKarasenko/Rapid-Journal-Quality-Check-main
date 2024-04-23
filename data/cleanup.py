@@ -5,7 +5,24 @@
 # " INFORMATIONRETRIEVALFACILITYCONFERENCE  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA   1  NA  NA  NA  NA  NA  NA  NA   Information Retrieval Facility Conference \\n" +
 # " INTERNATIONALCONFERENCEONADVANCEDCOMMUNICATIONSCOMPUTATION  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA   International Conference on Advanced Communications and Computation \\n" +
 # """
+from typing import List
+
 import pandas as pd
+
+
+def read_file(file: str, columns: List[str]):
+    """Reads one of the base files and returns a DataFrame"""
+    file = open(file, "r", encoding="ISO-8859-1")
+    file = file.readlines()
+    for i in range(len(file)):
+        # Remove leading whitespace, double quote, and tab
+        file[i] = file[i].lstrip(' "\t')
+        # Remove trailing whitespace, newline character, double quote, space, plus sign, and tab
+        file[i] = file[i].rstrip(' \\n"+\n')
+        file[i] = file[i].strip("'")
+        # Split the string into items
+        file[i] = file[i].split("\t")
+
 
 file = open("Names.txt", "r", encoding="ISO-8859-1")
 test = file.readlines()
@@ -86,3 +103,7 @@ saveFile(dd, "Names_test3")
 for i in range(dff.shape[-1]):
     dd = dff.iloc[:, i].to_dict()
     saveFile(dd, f"{columns[i+1]}")
+
+
+def create_mapping():
+    raise NotImplementedError("Not implemented yet")

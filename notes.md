@@ -35,4 +35,5 @@ X_XJOURNALOFRETAILINGCONSUMERSERVICES\1/Q1\2/104\3/C\4/3\5/3\6/B\7/NA\8/NA\9/NA\
 |---------------------------------------|-------|--------|-----|-------|-------|--------|------|--------|--------|-----|------|-----|-----|------|-----|--------|------|------|
 | X_XJOURNALOFRETAILINGCONSUMERSERVICES | Q1    | 104    | C   | 3     | 3     | B      | NA   | NA     | NA     | NA  | 1    | 2   | NA  | 14   | 24  | 12     | A    | NA   |
 
-With the second option the advantage is that i can put them into [data/VHB](./data/)
+With the second option the advantage is that i can put them into [data/names/](./data/names/), [data/issns/](./data/issns/) and [data/acro/](./data/acro/) and access them individually.
+This also necessitates to add the data to the content to the manifest.json in the ```content_scripts``` under js.
