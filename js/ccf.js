@@ -75,17 +75,19 @@ ccf.getRankInfo = function (refine, type, ISSN1, ISSN2, dblp_venue) {
         ISSN1 = ISSN1.replace(/[^A-Z0-9]/ig, "");
         issn = ISSN1;    
 
-        let position_start = ccf.FullRank_ISSNs.indexOf("X_X" + issn + "\1/");
+        // let position_start = ccf.FullRank_ISSNs.indexOf("X_X" + issn + "\1/");
+        let position_start = ccf.issnSJR_Q[issn]; // we build the dataset from a csv file so if ANY rating exists there will be at least an entry with NA in all others
 
-        if (ISSN2 != "" && ISSN2 != undefined && position_start == -1) {
+        if (ISSN2 != "" && ISSN2 != undefined && position_start === undefined) {
                 
             ISSN2 = ISSN2.toUpperCase(); 
             ISSN2 = ISSN2.replace(/[^A-Z0-9]/ig, "");
             issn = ISSN2; 
                 
-            position_start = ccf.FullRank_ISSNs.indexOf("X_X" + issn + "\1/");
+            // position_start = ccf.FullRank_ISSNs.indexOf("X_X" + issn + "\1/");
+            position_start = ccf.issnSJR_Q[issn]; 
         }
-        if (position_start == -1 && url != "" && url != undefined) {
+        if (position_start === undefined && url != "" && url != undefined) {
             position_start = ccf.SJR_Q[url]; // we build the dataset from a csv file so if ANY rating exists there will be at least an entry with NA in all others
             if (position_start !== undefined) { // single undefined check
                 sjrq2 = position_start || "NA"; // if the rating is an empty string, we replace it with NA
@@ -170,112 +172,72 @@ ccf.getRankInfo = function (refine, type, ISSN1, ISSN2, dblp_venue) {
 
         } else {
  
-            if (position_start != -1) {                
+            if (position_start !== undefined) {                
         
-                let sjrq2_pos_s = ccf.FullRank_ISSNs.indexOf("\1/", position_start);
-                let sjrq2_pos_e = ccf.FullRank_ISSNs.indexOf("\2/", position_start);
-                let sjrq2 = ccf.FullRank_ISSNs.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                rank = sjrq2;  
-                rankInfo.AllRanks.SJR_Q2 = rank;
-                rankInfo.ranks.push(rank);
+                sjrq2 = position_start || "NA"; // if the rating is an empty string, we replace it with NA
+                rankInfo.AllRanks.SJR_Q2 = sjrq2;
+                rankInfo.ranks.push(sjrq2);
         
-                sjrq2_pos_s = ccf.FullRank_ISSNs.indexOf("\2/", position_start);
-                sjrq2_pos_e = ccf.FullRank_ISSNs.indexOf("\3/", position_start);
-                sjrq2 = ccf.FullRank_ISSNs.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                rank = sjrq2;  
-                rankInfo.AllRanks.SJR_H = rank;
-                rankInfo.ranks.push(rank);
-        
-                sjrq2_pos_s = ccf.FullRank_ISSNs.indexOf("\3/", position_start);
-                sjrq2_pos_e = ccf.FullRank_ISSNs.indexOf("\4/", position_start);
-                sjrq2 = ccf.FullRank_ISSNs.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                rank = sjrq2;  
-                rankInfo.AllRanks.VHB = rank;
-                rankInfo.ranks.push(rank);
+                sjrq2 = ccf.issnSJR_H[issn] || "NA";
+                rankInfo.AllRanks.SJR_H = sjrq2;
+                rankInfo.ranks.push(sjrq2);
 
-                sjrq2_pos_s = ccf.FullRank_ISSNs.indexOf("\4/", position_start);
-                sjrq2_pos_e = ccf.FullRank_ISSNs.indexOf("\5/", position_start);
-                sjrq2 = ccf.FullRank_ISSNs.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                rank = sjrq2;  
-                rankInfo.AllRanks.FNEGE = rank;
-                rankInfo.ranks.push(rank);
+                sjrq2 = ccf.issnVHB[issn] || "NA";
+                rankInfo.AllRanks.VHB = sjrq2;
+                rankInfo.ranks.push(sjrq2);
 
-                sjrq2_pos_s = ccf.FullRank_ISSNs.indexOf("\5/", position_start);
-                sjrq2_pos_e = ccf.FullRank_ISSNs.indexOf("\6/", position_start);
-                sjrq2 = ccf.FullRank_ISSNs.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                rank = sjrq2;  
-                rankInfo.AllRanks.CoNRS = rank;
-                rankInfo.ranks.push(rank);
+                sjrq2 = ccf.issnFNEGE[issn] || "NA";
+                rankInfo.AllRanks.FNEGE = sjrq2;
+                rankInfo.ranks.push(sjrq2);
 
-                sjrq2_pos_s = ccf.FullRank_ISSNs.indexOf("\6/", position_start);
-                sjrq2_pos_e = ccf.FullRank_ISSNs.indexOf("\7/", position_start);
-                sjrq2 = ccf.FullRank_ISSNs.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                rank = sjrq2;  
-                rankInfo.AllRanks.HCERE = rank;
-                rankInfo.ranks.push(rank);
+                sjrq2 = ccf.issnCoNRS[issn] || "NA";
+                rankInfo.AllRanks.CoNRS = sjrq2;
+                rankInfo.ranks.push(sjrq2);
 
-                sjrq2_pos_s = ccf.FullRank_ISSNs.indexOf("\7/", position_start);
-                sjrq2_pos_e = ccf.FullRank_ISSNs.indexOf("\8/", position_start);
-                sjrq2 = ccf.FullRank_ISSNs.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                rank = sjrq2;  
-                rankInfo.AllRanks.CORE = rank;
-                rankInfo.ranks.push(rank);
+                sjrq2 = ccf.issnHCERE[issn] || "NA";
+                rankInfo.AllRanks.HCERE = sjrq2;
+                rankInfo.ranks.push(sjrq2);
 
-                sjrq2_pos_s = ccf.FullRank_ISSNs.indexOf("\8/", position_start);
-                sjrq2_pos_e = ccf.FullRank_ISSNs.indexOf("\9/", position_start);
-                sjrq2 = ccf.FullRank_ISSNs.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                rank = sjrq2;  
-                rankInfo.AllRanks.CORE_source = rank;
-                rankInfo.ranks.push(rank);
+                sjrq2 = ccf.issnCORE[issn] || "NA";
+                rankInfo.AllRanks.CORE = sjrq2;
+                rankInfo.ranks.push(sjrq2);
 
-                sjrq2_pos_s = ccf.FullRank_ISSNs.indexOf("\9/", position_start);
-                sjrq2_pos_e = ccf.FullRank_ISSNs.indexOf("\10/", position_start);
-                sjrq2 = ccf.FullRank_ISSNs.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                rank = sjrq2;  
-                rankInfo.AllRanks.DAEN = rank;
-                rankInfo.ranks.push(rank);
+                sjrq2 = ccf.issnsource[issn] || "NA";
+                rankInfo.AllRanks.CORE_source = sjrq2;
+                rankInfo.ranks.push(sjrq2);
 
-                sjrq2_pos_s = ccf.FullRank_ISSNs.indexOf("\10/", position_start);
-                sjrq2_pos_e = ccf.FullRank_ISSNs.indexOf("\11/", position_start);
-                sjrq2 = ccf.FullRank_ISSNs.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                rank = sjrq2;  
-                rankInfo.AllRanks.AJG = rank;
-                rankInfo.ranks.push(rank);
+                sjrq2 = ccf.issnCORE_c[issn] || "NA";
+                rankInfo.AllRanks.CORE_Conf = sjrq2;
+                rankInfo.ranks.push(sjrq2);
 
-                sjrq2_pos_s = ccf.FullRank_ISSNs.indexOf("\11/", position_start);
-                sjrq2_pos_e = ccf.FullRank_ISSNs.indexOf("\12/", position_start);
-                sjrq2 = ccf.FullRank_ISSNs.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                rank = sjrq2;  
-                rankInfo.AllRanks.JCR = rank;
-                rankInfo.ranks.push(rank);
+                sjrq2 = ccf.issnDAEN[issn] || "NA";
+                rankInfo.AllRanks.DAEN = sjrq2;
+                rankInfo.ranks.push(sjrq2);
 
-                sjrq2_pos_s = ccf.FullRank_ISSNs.indexOf("\12/", position_start);
-                sjrq2_pos_e = ccf.FullRank_ISSNs.indexOf("\13/", position_start);
-                sjrq2 = ccf.FullRank_ISSNs.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                rank = sjrq2;  
-                rankInfo.AllRanks.SNIP = rank;
-                rankInfo.ranks.push(rank);
+                sjrq2 = ccf.issnAJG[issn] || "NA";
+                rankInfo.AllRanks.AJG = sjrq2;
+                rankInfo.ranks.push(sjrq2);
 
-                sjrq2_pos_s = ccf.FullRank_ISSNs.indexOf("\13/", position_start);
-                sjrq2_pos_e = ccf.FullRank_ISSNs.indexOf("\14/", position_start);
-                sjrq2 = ccf.FullRank_ISSNs.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                rank = sjrq2;  
-                rankInfo.AllRanks.SJR = rank;
-                rankInfo.ranks.push(rank);
+                sjrq2 = ccf.issnJCR[issn] || "NA";
+                rankInfo.AllRanks.JCR = sjrq2;
+                rankInfo.ranks.push(sjrq2);
 
-                sjrq2_pos_s = ccf.FullRank_ISSNs.indexOf("\14/", position_start);
-                sjrq2_pos_e = ccf.FullRank_ISSNs.indexOf("\15/", position_start);
-                sjrq2 = ccf.FullRank_ISSNs.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                rank = sjrq2;  
-                rankInfo.AllRanks.CiteScore = rank;
-                rankInfo.ranks.push(rank);
+                sjrq2 = ccf.issnSNIP[issn] || "NA";
+                rankInfo.AllRanks.SNIP = sjrq2;
+                rankInfo.ranks.push(sjrq2);
 
-                sjrq2_pos_s = ccf.FullRank_ISSNs.indexOf("\15/", position_start);
-                sjrq2_pos_e = ccf.FullRank_ISSNs.indexOf("\16/", position_start);
-                sjrq2 = ccf.FullRank_ISSNs.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                rank = sjrq2;  
-                rankInfo.AllRanks.ABDC = rank;
-                rankInfo.ranks.push(rank);
+                sjrq2 = ccf.issnSJR[issn] || "NA";
+                rankInfo.AllRanks.SJR = sjrq2;
+                rankInfo.ranks.push(sjrq2);
+
+                sjrq2 = ccf.issnCiteS[issn] || "NA";
+                rankInfo.AllRanks.CiteScore = sjrq2;
+                rankInfo.ranks.push(sjrq2);
+
+                sjrq2 = ccf.issnABDC[issn] || "NA";
+                rankInfo.AllRanks.ABDC = sjrq2;
+                rankInfo.ranks.push(sjrq2);
+
         
                 position_start = ccf.FT50[url]; // we build the dataset from a csv file so if ANY rating exists there will be at least an entry with NA in all others
     

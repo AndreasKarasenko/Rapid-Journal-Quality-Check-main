@@ -21,9 +21,10 @@ CircumventCrossRef = function (journal3, node, title, compl, scholar, elid, auth
     url = url.normalize('NFD');
     url = url.replace(/[^A-Z0-9]/ig, "");
         
-    let position_start = ccf.FullRank_Names.indexOf("X_X" + url + "\1/");
+    // let position_start = ccf.FullRank_Names.indexOf("X_X" + url + "\1/");
+    let position_start = ccf.SJR_Q[url];
            
-    if (position_start != -1) {
+    if (position_start !== undefined) {
         for (let getRankSpan of scholar.rankSpanList) {
                 let doi = "";
                 $(node).after(getRankSpan(journal3, "full_cap", doi, elid, "", "", "", "", settings)); } 
