@@ -29,6 +29,7 @@ columns = [
     "CiteSc",
     "ABDC",
     "FT50",
+    "VHB4",
     "NF",  # NamesFull
 ]
 
@@ -144,6 +145,7 @@ columns = [
     "SJR",
     "CiteS",
     "ABDC",
+    "VHB4",
     "NF",
 ]
 
@@ -156,4 +158,4 @@ df.replace("NA", "", inplace=True)
 df.set_index("ISSN", inplace=True)
 for i in range(df.shape[-1]):
     dd = df.iloc[:, i].to_dict()
-    saveFile(dd, f"{columns[i+1]}")
+    saveFile(dd, f"issn{columns[i+1]}")
