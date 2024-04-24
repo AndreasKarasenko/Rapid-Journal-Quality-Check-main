@@ -13,6 +13,7 @@ loadSettings().then(function(items) {
 
     settings.SJR = items.SJR;
     settings.VHB = items.VHB;
+    settings.VHB4 = items.VHB4;
     settings.FNEGE = items.FNEGE;
     settings.CoNRS = items.CoNRS;
     settings.HCERE = items.HCERE;

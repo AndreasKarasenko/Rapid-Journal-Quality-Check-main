@@ -19,6 +19,7 @@ function save_options() {
     ext_on: on_off,
     SJR: document.getElementById('SJR').checked,
     VHB: document.getElementById('VHB').checked,
+    VHB4: document.getElementById('VHB4').checked,
     FNEGE: document.getElementById('FNEGE').checked,
     CoNRS: document.getElementById('CoNRS').checked,
     HCERE: document.getElementById('HCERE').checked,
@@ -47,6 +48,7 @@ function restore_options() {
     ext_on: true,
     SJR: document.getElementById('SJR').checked,
     VHB: document.getElementById('VHB').checked,
+    VHB4: document.getElementById('VHB4').checked,
     FNEGE: document.getElementById('FNEGE').checked,
     CoNRS: document.getElementById('CoNRS').checked,
     HCERE: document.getElementById('HCERE').checked,
@@ -61,6 +63,7 @@ function restore_options() {
     document.getElementById('on').checked = items.ext_on;
     document.getElementById('SJR').checked = items.SJR;
     document.getElementById('VHB').checked = items.VHB;
+    document.getElementById('VHB4').checked = items.VHB4;
     document.getElementById('FNEGE').checked = items.FNEGE;
     document.getElementById('CoNRS').checked = items.CoNRS;
     document.getElementById('HCERE').checked = items.HCERE;
@@ -78,6 +81,7 @@ document.addEventListener('DOMContentLoaded', restore_options);
 document.getElementById('on').addEventListener('click', save_options);
 document.getElementById('SJR').addEventListener('click', save_options);
 document.getElementById('VHB').addEventListener('click', save_options);
+document.getElementById('VHB4').addEventListener('click', save_options);
 document.getElementById('FNEGE').addEventListener('click', save_options);
 document.getElementById('CoNRS').addEventListener('click', save_options);
 document.getElementById('HCERE').addEventListener('click', save_options);
@@ -105,6 +109,7 @@ function getSettings() {
 
         settings.SJR = items.SJR;
         settings.VHB = items.VHB;
+        settings.VHB4 = items.VHB4;
         settings.FNEGE = items.FNEGE;
         settings.CoNRS = items.CoNRS;
         settings.HCERE = items.HCERE;
@@ -255,7 +260,8 @@ function joursearch_func(settings) {
     url = url.normalize('NFD');
     url = url.replace(/[^A-Z0-9]/ig, "");
     
-    let position_start = FullRank_Names.indexOf("X_X" + url + "\1/");
+    // let position_start = FullRank_Names.indexOf("X_X" + url + "\1/");
+    let position_start = SJR_Q[url];
      
     let span_popup = getRankSpan(url, "full_cap", "", "", "", "", "", "", settings)
     //let span_popup = getRankSpan(url, "full_cap", "", "", "", "", "", "")
@@ -280,7 +286,7 @@ function joursearch_func(settings) {
 
     if(input.length == 0) {
         alert("Please enter a journal name.");
-    } else if (position_start != -1) {
+    } else if (position_start !== undefined) {
        
     const res_list = {};
     names.forEach((element, index) => {
@@ -352,135 +358,208 @@ getRankInfo = function (refine, type, ISSN1, ISSN2, dblp_venue) {
     url = url.normalize('NFD');
     url = url.replace(/[^A-Z0-9]/ig, "");
 
-    position_start = FullRank_Names.indexOf("X_X" + url + "\1/");
+    // position_start = FullRank_Names.indexOf("X_X" + url + "\1/");
+    position_start = SJR_Q[url];
         
-            if (position_start != -1) {
+            if (position_start !== undefined) {
         
-                let sjrq2_pos_s = FullRank_Names.indexOf("\1/", position_start);
-                let sjrq2_pos_e = FullRank_Names.indexOf("\2/", position_start);
-                let sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                rank = sjrq2;  
-                rankInfo.AllRanks.SJR_Q2 = rank;
-                rankInfo.ranks.push(rank);
+                sjrq2 = position_start || "NA"; // if the rating is an empty string, we replace it with NA
+                rankInfo.AllRanks.SJR_Q2 = sjrq2;
+                rankInfo.ranks.push(sjrq2);
+
+                sjrq2 = ccf.SJR_Hi[url] || "NA";
+                rankInfo.AllRanks.SJR_H = sjrq2;
+                rankInfo.ranks.push(sjrq2);
+
+                sjrq2 = ccf.VHB[url] || "NA";
+                rankInfo.AllRanks.VHB = sjrq2;
+                rankInfo.ranks.push(sjrq2);
+
+                sjrq2 = ccf.FNEGE[url] || "NA";
+                rankInfo.AllRanks.FNEGE = sjrq2;
+                rankInfo.ranks.push(sjrq2);
+
+                sjrq2 = ccf.CoNRS[url] || "NA";
+                rankInfo.AllRanks.CoNRS = sjrq2;
+                rankInfo.ranks.push(sjrq2);
+
+                sjrq2 = ccf.HCERES[url] || "NA";
+                rankInfo.AllRanks.HCERE = sjrq2;
+                rankInfo.ranks.push(sjrq2);
+
+                sjrq2 = ccf.CORE[url] || "NA";
+                rankInfo.AllRanks.CORE = sjrq2;
+                rankInfo.ranks.push(sjrq2);
+
+                sjrq2 = ccf.source[url] || "NA";
+                rankInfo.AllRanks.CORE_source = sjrq2;
+                rankInfo.ranks.push(sjrq2);
+
+                sjrq2 = ccf.CORE_c[url] || "NA";
+                rankInfo.AllRanks.CORE_Conf = sjrq2;
+                rankInfo.ranks.push(sjrq2);
+
+                sjrq2 = ccf.CCF[url] || "NA";
+                rankInfo.AllRanks.CCF = sjrq2;
+                rankInfo.ranks.push(sjrq2);
+
+                sjrq2 = "NA";
+                rankInfo.AllRanks.DAEN = sjrq2;
+                rankInfo.ranks.push(sjrq2);
+
+                sjrq2 = ccf.AJG[url] || "NA";
+                rankInfo.AllRanks.AJG = sjrq2;
+                rankInfo.ranks.push(sjrq2);
+
+                sjrq2 = ccf.JCR[url] || "NA";
+                rankInfo.AllRanks.JCR = sjrq2;
+                rankInfo.ranks.push(sjrq2);
+
+                sjrq2 = ccf.SNIP[url] || "NA";
+                rankInfo.AllRanks.SNIP = sjrq2;
+                rankInfo.ranks.push(sjrq2);
+
+                sjrq2 = ccf.SJR[url] || "NA";
+                rankInfo.AllRanks.SJR = sjrq2;
+                rankInfo.ranks.push(sjrq2);
+
+                sjrq2 = ccf.CiteSc[url] || "NA";
+                rankInfo.AllRanks.CiteScore = sjrq2;
+                rankInfo.ranks.push(sjrq2);
+
+                sjrq2 = ccf.ABDC[url] || "NA";
+                rankInfo.AllRanks.ABDC = sjrq2;
+                rankInfo.ranks.push(sjrq2);
+
+                sjrq2 = ccf.FT50[url] || "NA";
+                rankInfo.AllRanks.FT50 = sjrq2;
+                rankInfo.ranks.push(sjrq2);
+
+                // let sjrq2_pos_s = FullRank_Names.indexOf("\1/", position_start);
+                // let sjrq2_pos_e = FullRank_Names.indexOf("\2/", position_start);
+                // let sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
+                // rank = sjrq2;  
+                // rankInfo.AllRanks.SJR_Q2 = rank;
+                // rankInfo.ranks.push(rank);
         
-                sjrq2_pos_s = FullRank_Names.indexOf("\2/", position_start);
-                sjrq2_pos_e = FullRank_Names.indexOf("\3/", position_start);
-                sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                rank = sjrq2;  
-                rankInfo.AllRanks.SJR_H = rank;
-                rankInfo.ranks.push(rank);
+                // sjrq2_pos_s = FullRank_Names.indexOf("\2/", position_start);
+                // sjrq2_pos_e = FullRank_Names.indexOf("\3/", position_start);
+                // sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
+                // rank = sjrq2;  
+                // rankInfo.AllRanks.SJR_H = rank;
+                // rankInfo.ranks.push(rank);
         
-                sjrq2_pos_s = FullRank_Names.indexOf("\3/", position_start);
-                sjrq2_pos_e = FullRank_Names.indexOf("\4/", position_start);
-                sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                rank = sjrq2;  
-                rankInfo.AllRanks.VHB = rank;
-                rankInfo.ranks.push(rank);
+                // sjrq2_pos_s = FullRank_Names.indexOf("\3/", position_start);
+                // sjrq2_pos_e = FullRank_Names.indexOf("\4/", position_start);
+                // sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
+                // rank = sjrq2;  
+                // rankInfo.AllRanks.VHB = rank;
+                // rankInfo.ranks.push(rank);
 
-                sjrq2_pos_s = FullRank_Names.indexOf("\4/", position_start);
-                sjrq2_pos_e = FullRank_Names.indexOf("\5/", position_start);
-                sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                rank = sjrq2;  
-                rankInfo.AllRanks.FNEGE = rank;
-                rankInfo.ranks.push(rank);
+                // sjrq2_pos_s = FullRank_Names.indexOf("\4/", position_start);
+                // sjrq2_pos_e = FullRank_Names.indexOf("\5/", position_start);
+                // sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
+                // rank = sjrq2;  
+                // rankInfo.AllRanks.FNEGE = rank;
+                // rankInfo.ranks.push(rank);
 
-                sjrq2_pos_s = FullRank_Names.indexOf("\5/", position_start);
-                sjrq2_pos_e = FullRank_Names.indexOf("\6/", position_start);
-                sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                rank = sjrq2;  
-                rankInfo.AllRanks.CoNRS = rank;
-                rankInfo.ranks.push(rank);
+                // sjrq2_pos_s = FullRank_Names.indexOf("\5/", position_start);
+                // sjrq2_pos_e = FullRank_Names.indexOf("\6/", position_start);
+                // sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
+                // rank = sjrq2;  
+                // rankInfo.AllRanks.CoNRS = rank;
+                // rankInfo.ranks.push(rank);
 
-                sjrq2_pos_s = FullRank_Names.indexOf("\6/", position_start);
-                sjrq2_pos_e = FullRank_Names.indexOf("\7/", position_start);
-                sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                rank = sjrq2;  
-                rankInfo.AllRanks.HCERE = rank;
-                rankInfo.ranks.push(rank);
+                // sjrq2_pos_s = FullRank_Names.indexOf("\6/", position_start);
+                // sjrq2_pos_e = FullRank_Names.indexOf("\7/", position_start);
+                // sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
+                // rank = sjrq2;  
+                // rankInfo.AllRanks.HCERE = rank;
+                // rankInfo.ranks.push(rank);
 
-                sjrq2_pos_s = FullRank_Names.indexOf("\7/", position_start);
-                sjrq2_pos_e = FullRank_Names.indexOf("\8/", position_start);
-                sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                rank = sjrq2;  
-                rankInfo.AllRanks.CORE = rank;
-                rankInfo.ranks.push(rank);
+                // sjrq2_pos_s = FullRank_Names.indexOf("\7/", position_start);
+                // sjrq2_pos_e = FullRank_Names.indexOf("\8/", position_start);
+                // sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
+                // rank = sjrq2;  
+                // rankInfo.AllRanks.CORE = rank;
+                // rankInfo.ranks.push(rank);
               
-                sjrq2_pos_s = FullRank_Names.indexOf("\8/", position_start);
-                sjrq2_pos_e = FullRank_Names.indexOf("\9/", position_start);
-                sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                rank = sjrq2;  
-                rankInfo.AllRanks.CORE_source = rank;
-                rankInfo.ranks.push(rank);
+                // sjrq2_pos_s = FullRank_Names.indexOf("\8/", position_start);
+                // sjrq2_pos_e = FullRank_Names.indexOf("\9/", position_start);
+                // sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
+                // rank = sjrq2;  
+                // rankInfo.AllRanks.CORE_source = rank;
+                // rankInfo.ranks.push(rank);
 
-                sjrq2_pos_s = FullRank_Names.indexOf("\9/", position_start);
-                sjrq2_pos_e = FullRank_Names.indexOf("\10/", position_start);
-                sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                rank = sjrq2;  
-                rankInfo.AllRanks.CORE_Conf = rank;
-                rankInfo.ranks.push(rank);
+                // sjrq2_pos_s = FullRank_Names.indexOf("\9/", position_start);
+                // sjrq2_pos_e = FullRank_Names.indexOf("\10/", position_start);
+                // sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
+                // rank = sjrq2;  
+                // rankInfo.AllRanks.CORE_Conf = rank;
+                // rankInfo.ranks.push(rank);
 
-                sjrq2_pos_s = FullRank_Names.indexOf("\10/", position_start);
-                sjrq2_pos_e = FullRank_Names.indexOf("\11/", position_start);
-                sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                rank = sjrq2;  
-                rankInfo.AllRanks.CCF = rank;
-                rankInfo.ranks.push(rank);
+                // sjrq2_pos_s = FullRank_Names.indexOf("\10/", position_start);
+                // sjrq2_pos_e = FullRank_Names.indexOf("\11/", position_start);
+                // sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
+                // rank = sjrq2;  
+                // rankInfo.AllRanks.CCF = rank;
+                // rankInfo.ranks.push(rank);
 
-                sjrq2_pos_s = FullRank_Names.indexOf("\11/", position_start);
-                sjrq2_pos_e = FullRank_Names.indexOf("\12/", position_start);
-                sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                rank = sjrq2;  
-                rankInfo.AllRanks.DAEN = rank;
-                rankInfo.ranks.push(rank);
+                // sjrq2_pos_s = FullRank_Names.indexOf("\11/", position_start);
+                // sjrq2_pos_e = FullRank_Names.indexOf("\12/", position_start);
+                // sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
+                // rank = sjrq2;  
+                // rankInfo.AllRanks.DAEN = rank;
+                // rankInfo.ranks.push(rank);
 
-                sjrq2_pos_s = FullRank_Names.indexOf("\12/", position_start);
-                sjrq2_pos_e = FullRank_Names.indexOf("\13/", position_start);
-                sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                rank = sjrq2;  
-                rankInfo.AllRanks.AJG = rank;
-                rankInfo.ranks.push(rank);
+                // sjrq2_pos_s = FullRank_Names.indexOf("\12/", position_start);
+                // sjrq2_pos_e = FullRank_Names.indexOf("\13/", position_start);
+                // sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
+                // rank = sjrq2;  
+                // rankInfo.AllRanks.AJG = rank;
+                // rankInfo.ranks.push(rank);
 
-                sjrq2_pos_s = FullRank_Names.indexOf("\13/", position_start);
-                sjrq2_pos_e = FullRank_Names.indexOf("\14/", position_start);
-                sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                rank = sjrq2;  
-                rankInfo.AllRanks.JCR = rank;
-                rankInfo.ranks.push(rank);
+                // sjrq2_pos_s = FullRank_Names.indexOf("\13/", position_start);
+                // sjrq2_pos_e = FullRank_Names.indexOf("\14/", position_start);
+                // sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
+                // rank = sjrq2;  
+                // rankInfo.AllRanks.JCR = rank;
+                // rankInfo.ranks.push(rank);
 
-                sjrq2_pos_s = FullRank_Names.indexOf("\14/", position_start);
-                sjrq2_pos_e = FullRank_Names.indexOf("\15/", position_start);
-                sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                rank = sjrq2;  
-                rankInfo.AllRanks.SNIP = rank;
-                rankInfo.ranks.push(rank);
+                // sjrq2_pos_s = FullRank_Names.indexOf("\14/", position_start);
+                // sjrq2_pos_e = FullRank_Names.indexOf("\15/", position_start);
+                // sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
+                // rank = sjrq2;  
+                // rankInfo.AllRanks.SNIP = rank;
+                // rankInfo.ranks.push(rank);
 
-                sjrq2_pos_s = FullRank_Names.indexOf("\15/", position_start);
-                sjrq2_pos_e = FullRank_Names.indexOf("\16/", position_start);
-                sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                rank = sjrq2;  
-                rankInfo.AllRanks.SJR = rank;
-                rankInfo.ranks.push(rank);
+                // sjrq2_pos_s = FullRank_Names.indexOf("\15/", position_start);
+                // sjrq2_pos_e = FullRank_Names.indexOf("\16/", position_start);
+                // sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
+                // rank = sjrq2;  
+                // rankInfo.AllRanks.SJR = rank;
+                // rankInfo.ranks.push(rank);
 
-                sjrq2_pos_s = FullRank_Names.indexOf("\16/", position_start);
-                sjrq2_pos_e = FullRank_Names.indexOf("\17/", position_start);
-                sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                rank = sjrq2;  
-                rankInfo.AllRanks.CiteScore = rank;
-                rankInfo.ranks.push(rank);
+                // sjrq2_pos_s = FullRank_Names.indexOf("\16/", position_start);
+                // sjrq2_pos_e = FullRank_Names.indexOf("\17/", position_start);
+                // sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
+                // rank = sjrq2;  
+                // rankInfo.AllRanks.CiteScore = rank;
+                // rankInfo.ranks.push(rank);
 
-                sjrq2_pos_s = FullRank_Names.indexOf("\17/", position_start);
-                sjrq2_pos_e = FullRank_Names.indexOf("\18/", position_start);
-                sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                rank = sjrq2;  
-                rankInfo.AllRanks.ABDC = rank;
-                rankInfo.ranks.push(rank);
+                // sjrq2_pos_s = FullRank_Names.indexOf("\17/", position_start);
+                // sjrq2_pos_e = FullRank_Names.indexOf("\18/", position_start);
+                // sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
+                // rank = sjrq2;  
+                // rankInfo.AllRanks.ABDC = rank;
+                // rankInfo.ranks.push(rank);
 
-                sjrq2_pos_s = FullRank_Names.indexOf("\18/", position_start);
-                sjrq2_pos_e = FullRank_Names.indexOf("\19/", position_start);
-                sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 3), sjrq2_pos_e);
-                rank = sjrq2;  
-                rankInfo.AllRanks.FT50 = rank;
-                rankInfo.ranks.push(rank);
+                // sjrq2_pos_s = FullRank_Names.indexOf("\18/", position_start);
+                // sjrq2_pos_e = FullRank_Names.indexOf("\19/", position_start);
+                // sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 3), sjrq2_pos_e);
+                // rank = sjrq2;  
+                // rankInfo.AllRanks.FT50 = rank;
+                // rankInfo.ranks.push(rank);
     
             } else {
 
