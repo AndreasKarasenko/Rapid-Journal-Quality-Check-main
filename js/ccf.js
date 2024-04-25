@@ -102,6 +102,10 @@ ccf.getRankInfo = function (refine, type, ISSN1, ISSN2, dblp_venue) {
                 rankInfo.AllRanks.VHB = sjrq2;
                 rankInfo.ranks.push(sjrq2);
 
+                sjrq2 = ccf.VHB4[url] || "NA";
+                rankInfo.AllRanks.VHB4 = sjrq2;
+                rankInfo.ranks.push(sjrq2);
+
                 sjrq2 = ccf.FNEGE[url] || "NA";
                 rankInfo.AllRanks.FNEGE = sjrq2;
                 rankInfo.ranks.push(sjrq2);
@@ -184,6 +188,10 @@ ccf.getRankInfo = function (refine, type, ISSN1, ISSN2, dblp_venue) {
 
                 sjrq2 = ccf.issnVHB[issn] || "NA";
                 rankInfo.AllRanks.VHB = sjrq2;
+                rankInfo.ranks.push(sjrq2);
+
+                sjrq2 = ccf.issnVHB4[issn] || "NA";
+                rankInfo.AllRanks.VHB4 = sjrq2;
                 rankInfo.ranks.push(sjrq2);
 
                 sjrq2 = ccf.issnFNEGE[issn] || "NA";
@@ -293,6 +301,10 @@ ccf.getRankInfo = function (refine, type, ISSN1, ISSN2, dblp_venue) {
 
                 sjrq2 = ccf.VHB[url] || "NA";
                 rankInfo.AllRanks.VHB = sjrq2;
+                rankInfo.ranks.push(sjrq2);
+
+                sjrq2 = ccf.VHB4[url] || "NA";
+                rankInfo.AllRanks.VHB4 = sjrq2;
                 rankInfo.ranks.push(sjrq2);
 
                 sjrq2 = ccf.FNEGE[url] || "NA";
@@ -464,49 +476,49 @@ ccf.getRankSpan = function (refine, type, doi, elid, ISSN1, ISSN2, dblp_venue, d
             .addClass("VHB3_" + rank.replace(/[+*/]/g, "plus").toLowerCase() )
             .text(rank); 
     }
-    
+
     let span3 = $("<span>");
-    rank = rankInfo.AllRanks.FNEGE;
+    rank = rankInfo.AllRanks.VHB4;
     if (rank != "NA" && rank != undefined) {
         allNA = allNA + 1;
         span3
+            .addClass("ccf-rank")
+            .addClass("VHB4_" + rank.replace(/[+*]/g, "plus").toLowerCase() )
+            .text(rank);
+    }
+    
+    let span4 = $("<span>");
+    rank = rankInfo.AllRanks.FNEGE;
+    if (rank != "NA" && rank != undefined) {
+        allNA = allNA + 1;
+        span4
             .addClass("ccf-rank")
             .addClass("FNEGE_" + rank.replace(/[+*]/g, "plus").toLowerCase() )
             .text(rank); 
     } 
         
-    let span4 = $("<span>");
+    let span5 = $("<span>");
     rank = rankInfo.AllRanks.CoNRS;
     if (rank != "NA" && rank != undefined) {
         allNA = allNA + 1;
-        span4
+        span5
             .addClass("ccf-rank")
             .addClass("CoNRS_" + rank.replace(/[+*]/g, "plus").toLowerCase() )
             .text(rank); 
     } 
     
-    let span5 = $("<span>");
+    let span6 = $("<span>");
     rank = rankInfo.AllRanks.HCERE;
     if (rank != "NA" && rank != undefined) {
         allNA = allNA + 1;
-        span5
+        span6
             .addClass("ccf-rank")
             .addClass("HCERE_" + rank.replace(/[+*]/g, "plus").toLowerCase() )
             .text(rank); 
     } 
     
-    let span6 = $("<span>");
-    rank = rankInfo.AllRanks.CORE;
-    if (rank != "NA" && rank != undefined) {
-        allNA = allNA + 1;
-        span6
-            .addClass("ccf-rank")
-            .addClass("CORE_" + rank.replace(/[+*]/g, "plus").toLowerCase() )
-            .text(rank); 
-    } 
-    
     let span7 = $("<span>");
-    rank = rankInfo.AllRanks.CORE_Conf;
+    rank = rankInfo.AllRanks.CORE;
     if (rank != "NA" && rank != undefined) {
         allNA = allNA + 1;
         span7
@@ -516,50 +528,60 @@ ccf.getRankSpan = function (refine, type, doi, elid, ISSN1, ISSN2, dblp_venue, d
     } 
     
     let span8 = $("<span>");
-    rank = rankInfo.AllRanks.CCF;
+    rank = rankInfo.AllRanks.CORE_Conf;
     if (rank != "NA" && rank != undefined) {
         allNA = allNA + 1;
         span8
+            .addClass("ccf-rank")
+            .addClass("CORE_" + rank.replace(/[+*]/g, "plus").toLowerCase() )
+            .text(rank); 
+    } 
+    
+    let span9 = $("<span>");
+    rank = rankInfo.AllRanks.CCF;
+    if (rank != "NA" && rank != undefined) {
+        allNA = allNA + 1;
+        span9
             .addClass("ccf-rank")
             .addClass("CCF_" + rank.replace(/[+*]/g, "plus").toLowerCase() )
             .text(rank); 
     } 
     
-    let span9 = $("<span>");
+    let span10 = $("<span>");
     rank = rankInfo.AllRanks.DAEN;
     if (rank != "NA" && rank != undefined) {
         allNA = allNA + 1;
-        span9
+        span10
             .addClass("ccf-rank")
             .addClass("DAEN_" + rank.replace(/[+*]/g, "plus").toLowerCase() )
             .text(rank); 
     } 
     
-    let span10 = $("<span>");
+    let span11 = $("<span>");
     rank = rankInfo.AllRanks.AJG;
     if (rank != "NA" && rank != undefined) {
         allNA = allNA + 1;
-        span10
+        span11
             .addClass("ccf-rank")
             .addClass("AJG_" + rank.replace(/[+*]/g, "plus").toLowerCase() )
             .text(rank); 
     } 
         
-    let span11 = $("<span>");
+    let span12 = $("<span>");
     rank = rankInfo.AllRanks.ABDC;
     if (rank != "NA" && rank != undefined) {
         allNA = allNA + 1;
-        span11
+        span12
             .addClass("ccf-rank")
             .addClass("ABDC_" + rank.replace(/[+*]/g, "plus").toLowerCase() )
             .text(rank); 
     } 
     
-    let span12 = $("<span>");
+    let span13 = $("<span>");
     rank = rankInfo.AllRanks.FT50;
     if (rank != "NA" && rank != undefined) {
         allNA = allNA + 1;
-        span12
+        span13
             .addClass("ccf-rank")
             .addClass("FT50_" + rank.replace(/[+*]/g, "plus").toLowerCase() )
             .text(rank); 
@@ -603,33 +625,43 @@ ccf.getRankSpan = function (refine, type, doi, elid, ISSN1, ISSN2, dblp_venue, d
           popup_text_add += "VHB3: " + rankInfo.AllRanks.VHB + "   ";
           Ranks_additional.push(rankInfo.AllRanks.VHB); 
         }
+
+      if(settings.VHB4 === true) {
+          span123.append(span3);
+          popup_text += "VHB4: " + rankInfo.AllRanks.VHB4 + "   ";
+          Ranks_chosen.push(rankInfo.AllRanks.VHB4);
+        } else {
+          span456.append(span3);
+          popup_text_add += "VHB4: " + rankInfo.AllRanks.VHB4 + "   ";
+          Ranks_additional.push(rankInfo.AllRanks.VHB4);
+        }
     
       if(settings.FNEGE === true) { 
-          span123.append(span3); 
+          span123.append(span4); 
           popup_text += "FNEGE: " + rankInfo.AllRanks.FNEGE + "   ";
           Ranks_chosen.push(rankInfo.AllRanks.FNEGE); 
       } else { 
-          span456.append(span3); 
+          span456.append(span4); 
           popup_text_add += "FNEGE: " + rankInfo.AllRanks.FNEGE + "   ";
           Ranks_additional.push(rankInfo.AllRanks.FNEGE); 
         }
 
       if(settings.CoNRS === true) { 
-          span123.append(span4);
+          span123.append(span5);
           popup_text += "CoNRS: " + rankInfo.AllRanks.CoNRS + "   ";
           Ranks_chosen.push(rankInfo.AllRanks.CoNRS); 
       } else { 
-          span456.append(span4); 
+          span456.append(span5); 
           popup_text_add += "CoNRS: " + rankInfo.AllRanks.CoNRS + "   ";
           Ranks_additional.push(rankInfo.AllRanks.CoNRS); 
         }
 
       if(settings.HCERE === true) {  
-          span123.append(span5);
+          span123.append(span6);
           popup_text += "HCERE: " + rankInfo.AllRanks.HCERE + "   ";
           Ranks_chosen.push(rankInfo.AllRanks.HCERE); 
       } else { 
-          span456.append(span5); 
+          span456.append(span6); 
           popup_text_add += "HCERE: " + rankInfo.AllRanks.HCERE + "   ";
           Ranks_additional.push(rankInfo.AllRanks.HCERE); 
         }
@@ -638,8 +670,8 @@ ccf.getRankSpan = function (refine, type, doi, elid, ISSN1, ISSN2, dblp_venue, d
     let show_only_CORE = 0;
     let show_only_CORE_add = 0;
       if(settings.CORE === true) { 
-          span123.append(span6);
           span123.append(span7);
+          span123.append(span8);
           if(rankInfo.AllRanks.CORE != "NA") { popup_text += "CORE (Jour.): " + rankInfo.AllRanks.CORE + "   "; }
           if(rankInfo.AllRanks.CORE_Conf != "NA") { popup_text += "CORE (Conf.): " + rankInfo.AllRanks.CORE_Conf + " "; }
           if(rankInfo.AllRanks.CORE_Conf == "NA" && rankInfo.AllRanks.CORE == "NA") { popup_text += "CORE: " + rankInfo.AllRanks.CORE_Conf + "   "; }
@@ -650,8 +682,8 @@ ccf.getRankSpan = function (refine, type, doi, elid, ISSN1, ISSN2, dblp_venue, d
           Ranks_chosen.push(rankInfo.AllRanks.CORE);
           Ranks_chosen.push(rankInfo.AllRanks.CORE_Conf);    
        } else { 
-          span456.append(span6);
           span456.append(span7);
+          span456.append(span8);
           if(rankInfo.AllRanks.CORE != "NA") { popup_text_add += "CORE (Jour.): " + rankInfo.AllRanks.CORE + "   "; }
           if(rankInfo.AllRanks.CORE_Conf != "NA") { popup_text_add += "CORE (Conf.): " + rankInfo.AllRanks.CORE_Conf + " "; }
           if(rankInfo.AllRanks.CORE_Conf == "NA" && rankInfo.AllRanks.CORE == "NA") { popup_text_add += "CORE: " + rankInfo.AllRanks.CORE_Conf + "   "; }
@@ -664,51 +696,51 @@ ccf.getRankSpan = function (refine, type, doi, elid, ISSN1, ISSN2, dblp_venue, d
        }
     
       if(settings.CCF === true) { 
-          span123.append(span8);
+          span123.append(span9);
           popup_text += "CCF: " + rankInfo.AllRanks.CCF + "   ";
           Ranks_chosen.push(rankInfo.AllRanks.CCF); 
        } else { 
-          span456.append(span8); 
+          span456.append(span9); 
           popup_text_add += "CCF: " + rankInfo.AllRanks.CCF + "   ";
           Ranks_additional.push(rankInfo.AllRanks.CCF); 
         }
 
       if(settings.DAEN === true) { 
-          span123.append(span9); 
+          span123.append(span10); 
           popup_text += "BFI: " + rankInfo.AllRanks.DAEN + "   ";
           Ranks_chosen.push(rankInfo.AllRanks.DAEN); 
       } else { 
-          span456.append(span9); 
+          span456.append(span10); 
           popup_text_add += "BFI: " + rankInfo.AllRanks.DAEN + "   ";
           Ranks_additional.push(rankInfo.AllRanks.DAEN); 
         }
 
       if(settings.AJG === true) { 
-          span123.append(span10);
+          span123.append(span11);
           popup_text += "AJG: " + rankInfo.AllRanks.AJG + "   ";
           Ranks_chosen.push(rankInfo.AllRanks.AJG); 
        } else { 
-          span456.append(span10); 
+          span456.append(span11); 
           popup_text_add += "AJG: " + rankInfo.AllRanks.AJG + "   ";
           Ranks_additional.push(rankInfo.AllRanks.AJG); 
         }
 
       if(settings.ABDC === true) { 
-          span123.append(span11);
+          span123.append(span12);
           popup_text += "ABDC: " + rankInfo.AllRanks.ABDC + "   ";
           Ranks_chosen.push(rankInfo.AllRanks.ABDC); 
        } else { 
-          span456.append(span11); 
+          span456.append(span12); 
           popup_text_add += "ABDC: " + rankInfo.AllRanks.ABDC + "   ";
           Ranks_additional.push(rankInfo.AllRanks.ABDC); 
         }
     
       if(settings.FT50 === true) { 
-          span123.append(span12);
+          span123.append(span13);
           popup_text += "FT50: " + rankInfo.AllRanks.FT50 + "   ";
           Ranks_chosen.push(rankInfo.AllRanks.FT50); 
        } else { 
-          span456.append(span12); 
+          span456.append(span13); 
           popup_text_add += "FT50: " + rankInfo.AllRanks.FT50 + "   ";
           Ranks_additional.push(rankInfo.AllRanks.FT50); 
         }  

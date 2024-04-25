@@ -38,6 +38,7 @@
          "data/names/ccf.SNIP.js",
          "data/names/ccf.source.js",
          "data/names/ccf.VHB.js",
+         "data/names/ccf.VHB4.js",
          "data/issns/ccf.issnABDC.js",
          "data/ccf.FullRank_Acro.js",
          "data/issns/ccf.issnABDC.js",
@@ -56,6 +57,7 @@
          "data/issns/ccf.issnSNIP.js",
          "data/issns/ccf.issnsourc.js",
          "data/issns/ccf.issnVHB.js",
+         "data/issns/ccf.issnVHB4.js",
          "script.js"
       ],
       "matches": [
