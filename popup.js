@@ -279,6 +279,7 @@ function joursearch_func(settings) {
     names.push("AJG");    
     names.push("ABDC");    
     names.push("FT50");    
+    names.push("VHB4");
 
 
     // create a div element to display the results
@@ -301,7 +302,7 @@ function joursearch_func(settings) {
     
     let i = 0;
     let text2 = "";
-    while (i < 13 && Object.keys(red_list)[i] !== undefined ) {
+    while (i < 14 && Object.keys(red_list)[i] !== undefined ) {
         text2 += Object.keys(red_list)[i] + ": " + toUnicodeVariant( Object.values(red_list)[i], 'bold') + ";       "  
         i++;
     } 
@@ -333,6 +334,10 @@ document.getElementById("joursearch_form").addEventListener('submit', getSetting
 /* ##### lookup ###### */
 const ccf = {};
 
+function loadCCF(ratingName, url) {
+    return browser.runtime.sendMessage({message: `get${ratingName}`, url: url});
+}
+
 getRankInfo = function (refine, type, ISSN1, ISSN2, dblp_venue) {
     let rankInfo = {};
     rankInfo.ranks = [];
@@ -359,214 +364,216 @@ getRankInfo = function (refine, type, ISSN1, ISSN2, dblp_venue) {
     url = url.replace(/[^A-Z0-9]/ig, "");
 
     // position_start = FullRank_Names.indexOf("X_X" + url + "\1/");
-    position_start = SJR_Q[url];
-        
-            if (position_start !== undefined) {
-        
-                sjrq2 = position_start || "NA"; // if the rating is an empty string, we replace it with NA
+
+    loadCCF("VHB", url).then(response => {
+        if (response !== undefined) {
+            let sjrq2 = response || "NA";
+            rankInfo.AllRanks.VHB = sjrq2;
+            rankInfo.ranks.push(sjrq2);
+
+            loadCCF("VHB4", url).then(response => {
+                let sjrq2 = response || "NA";
+                rankInfo.AllRanks.VHB4 = sjrq2;
+                rankInfo.ranks.push(sjrq2);
+            });
+
+            loadCCF("SJRQ2", url).then(response => {
+                let sjrq2 = response || "NA";
                 rankInfo.AllRanks.SJR_Q2 = sjrq2;
                 rankInfo.ranks.push(sjrq2);
+            });
 
-                sjrq2 = ccf.SJR_Hi[url] || "NA";
+            loadCCF("SJRH", url).then(response => {
+                let sjrq2 = response || "NA";
                 rankInfo.AllRanks.SJR_H = sjrq2;
                 rankInfo.ranks.push(sjrq2);
+            });
 
-                sjrq2 = ccf.VHB[url] || "NA";
-                rankInfo.AllRanks.VHB = sjrq2;
-                rankInfo.ranks.push(sjrq2);
-
-                sjrq2 = ccf.FNEGE[url] || "NA";
+            loadCCF("FNEGE", url).then(response => {
+                let sjrq2 = response || "NA";
                 rankInfo.AllRanks.FNEGE = sjrq2;
                 rankInfo.ranks.push(sjrq2);
+            });
 
-                sjrq2 = ccf.CoNRS[url] || "NA";
+            loadCCF("CoNRS", url).then(response => {
+                let sjrq2 = response || "NA";
                 rankInfo.AllRanks.CoNRS = sjrq2;
                 rankInfo.ranks.push(sjrq2);
+            });
 
-                sjrq2 = ccf.HCERES[url] || "NA";
+            loadCCF("HCERES", url).then(response => {
+                let sjrq2 = response || "NA";
                 rankInfo.AllRanks.HCERE = sjrq2;
                 rankInfo.ranks.push(sjrq2);
+            });
 
-                sjrq2 = ccf.CORE[url] || "NA";
+            loadCCF("CORE", url).then(response => {
+                let sjrq2 = response || "NA";
                 rankInfo.AllRanks.CORE = sjrq2;
                 rankInfo.ranks.push(sjrq2);
+            });
 
-                sjrq2 = ccf.source[url] || "NA";
+            loadCCF("CORE_source", url).then(response => {
+                let sjrq2 = response || "NA";
                 rankInfo.AllRanks.CORE_source = sjrq2;
                 rankInfo.ranks.push(sjrq2);
+            });
 
-                sjrq2 = ccf.CORE_c[url] || "NA";
+            loadCCF("CORE_c", url).then(response => {
+                let sjrq2 = response || "NA";
                 rankInfo.AllRanks.CORE_Conf = sjrq2;
                 rankInfo.ranks.push(sjrq2);
+            });
 
-                sjrq2 = ccf.CCF[url] || "NA";
+            loadCCF("CCF", url).then(response => {
+                let sjrq2 = response || "NA";
                 rankInfo.AllRanks.CCF = sjrq2;
                 rankInfo.ranks.push(sjrq2);
+            });
 
-                sjrq2 = "NA";
+            loadCCF("DAEN", url).then(response => {
+                let sjrq2 = response || "NA"; // maybe hard-cast to NA TODO
                 rankInfo.AllRanks.DAEN = sjrq2;
                 rankInfo.ranks.push(sjrq2);
+            });
 
-                sjrq2 = ccf.AJG[url] || "NA";
+            loadCCF("AJG", url).then(response => {
+                let sjrq2 = response || "NA";
                 rankInfo.AllRanks.AJG = sjrq2;
                 rankInfo.ranks.push(sjrq2);
+            });
 
-                sjrq2 = ccf.JCR[url] || "NA";
+            loadCCF("JCR", url).then(response => {
+                let sjrq2 = response || "NA";
                 rankInfo.AllRanks.JCR = sjrq2;
                 rankInfo.ranks.push(sjrq2);
+            });
 
-                sjrq2 = ccf.SNIP[url] || "NA";
+            loadCCF("SNIP", url).then(response => {
+                let sjrq2 = response || "NA";
                 rankInfo.AllRanks.SNIP = sjrq2;
                 rankInfo.ranks.push(sjrq2);
+            });
 
-                sjrq2 = ccf.SJR[url] || "NA";
+            loadCCF("SJR", url).then(response => {
+                let sjrq2 = response || "NA";
                 rankInfo.AllRanks.SJR = sjrq2;
                 rankInfo.ranks.push(sjrq2);
+            });
 
-                sjrq2 = ccf.CiteSc[url] || "NA";
+            loadCCF("CiteSc", url).then(response => {
+                let sjrq2 = response || "NA";
                 rankInfo.AllRanks.CiteScore = sjrq2;
                 rankInfo.ranks.push(sjrq2);
+            });
 
-                sjrq2 = ccf.ABDC[url] || "NA";
+            loadCCF("ABDC", url).then(response => {
+                let sjrq2 = response || "NA";
                 rankInfo.AllRanks.ABDC = sjrq2;
                 rankInfo.ranks.push(sjrq2);
+            });
 
-                sjrq2 = ccf.FT50[url] || "NA";
+            loadCCF("FT50", url).then(response => {
+                let sjrq2 = response || "NA";
                 rankInfo.AllRanks.FT50 = sjrq2;
                 rankInfo.ranks.push(sjrq2);
+            });
 
-                // let sjrq2_pos_s = FullRank_Names.indexOf("\1/", position_start);
-                // let sjrq2_pos_e = FullRank_Names.indexOf("\2/", position_start);
-                // let sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                // rank = sjrq2;  
-                // rankInfo.AllRanks.SJR_Q2 = rank;
-                // rankInfo.ranks.push(rank);
+        } else {
+
+            rank_txt = "NA";
+            rankInfo.info = "No ranking found for '" + refine + "'";
+            rankInfo.info2 = "";
+        }
+
+    });
+    // let position_start = SJR_Q[url];
         
-                // sjrq2_pos_s = FullRank_Names.indexOf("\2/", position_start);
-                // sjrq2_pos_e = FullRank_Names.indexOf("\3/", position_start);
-                // sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                // rank = sjrq2;  
-                // rankInfo.AllRanks.SJR_H = rank;
-                // rankInfo.ranks.push(rank);
+    //         if (position_start !== undefined) {
         
-                // sjrq2_pos_s = FullRank_Names.indexOf("\3/", position_start);
-                // sjrq2_pos_e = FullRank_Names.indexOf("\4/", position_start);
-                // sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                // rank = sjrq2;  
-                // rankInfo.AllRanks.VHB = rank;
-                // rankInfo.ranks.push(rank);
+    //             sjrq2 = position_start || "NA"; // if the rating is an empty string, we replace it with NA
+    //             rankInfo.AllRanks.SJR_Q2 = sjrq2;
+    //             rankInfo.ranks.push(sjrq2);
 
-                // sjrq2_pos_s = FullRank_Names.indexOf("\4/", position_start);
-                // sjrq2_pos_e = FullRank_Names.indexOf("\5/", position_start);
-                // sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                // rank = sjrq2;  
-                // rankInfo.AllRanks.FNEGE = rank;
-                // rankInfo.ranks.push(rank);
+    //             sjrq2 = ccf.SJR_Hi[url] || "NA";
+    //             rankInfo.AllRanks.SJR_H = sjrq2;
+    //             rankInfo.ranks.push(sjrq2);
 
-                // sjrq2_pos_s = FullRank_Names.indexOf("\5/", position_start);
-                // sjrq2_pos_e = FullRank_Names.indexOf("\6/", position_start);
-                // sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                // rank = sjrq2;  
-                // rankInfo.AllRanks.CoNRS = rank;
-                // rankInfo.ranks.push(rank);
+    //             sjrq2 = ccf.VHB[url] || "NA";
+    //             rankInfo.AllRanks.VHB = sjrq2;
+    //             rankInfo.ranks.push(sjrq2);
 
-                // sjrq2_pos_s = FullRank_Names.indexOf("\6/", position_start);
-                // sjrq2_pos_e = FullRank_Names.indexOf("\7/", position_start);
-                // sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                // rank = sjrq2;  
-                // rankInfo.AllRanks.HCERE = rank;
-                // rankInfo.ranks.push(rank);
+    //             sjrq2 = ccf.VHB4[url] || "NA";
+    //             rankInfo.AllRanks.VHB4 = sjrq2;
+    //             rankInfo.ranks.push(sjrq2);
 
-                // sjrq2_pos_s = FullRank_Names.indexOf("\7/", position_start);
-                // sjrq2_pos_e = FullRank_Names.indexOf("\8/", position_start);
-                // sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                // rank = sjrq2;  
-                // rankInfo.AllRanks.CORE = rank;
-                // rankInfo.ranks.push(rank);
-              
-                // sjrq2_pos_s = FullRank_Names.indexOf("\8/", position_start);
-                // sjrq2_pos_e = FullRank_Names.indexOf("\9/", position_start);
-                // sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                // rank = sjrq2;  
-                // rankInfo.AllRanks.CORE_source = rank;
-                // rankInfo.ranks.push(rank);
+    //             sjrq2 = ccf.FNEGE[url] || "NA";
+    //             rankInfo.AllRanks.FNEGE = sjrq2;
+    //             rankInfo.ranks.push(sjrq2);
 
-                // sjrq2_pos_s = FullRank_Names.indexOf("\9/", position_start);
-                // sjrq2_pos_e = FullRank_Names.indexOf("\10/", position_start);
-                // sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                // rank = sjrq2;  
-                // rankInfo.AllRanks.CORE_Conf = rank;
-                // rankInfo.ranks.push(rank);
+    //             sjrq2 = ccf.CoNRS[url] || "NA";
+    //             rankInfo.AllRanks.CoNRS = sjrq2;
+    //             rankInfo.ranks.push(sjrq2);
 
-                // sjrq2_pos_s = FullRank_Names.indexOf("\10/", position_start);
-                // sjrq2_pos_e = FullRank_Names.indexOf("\11/", position_start);
-                // sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                // rank = sjrq2;  
-                // rankInfo.AllRanks.CCF = rank;
-                // rankInfo.ranks.push(rank);
+    //             sjrq2 = ccf.HCERES[url] || "NA";
+    //             rankInfo.AllRanks.HCERE = sjrq2;
+    //             rankInfo.ranks.push(sjrq2);
 
-                // sjrq2_pos_s = FullRank_Names.indexOf("\11/", position_start);
-                // sjrq2_pos_e = FullRank_Names.indexOf("\12/", position_start);
-                // sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                // rank = sjrq2;  
-                // rankInfo.AllRanks.DAEN = rank;
-                // rankInfo.ranks.push(rank);
+    //             sjrq2 = ccf.CORE[url] || "NA";
+    //             rankInfo.AllRanks.CORE = sjrq2;
+    //             rankInfo.ranks.push(sjrq2);
 
-                // sjrq2_pos_s = FullRank_Names.indexOf("\12/", position_start);
-                // sjrq2_pos_e = FullRank_Names.indexOf("\13/", position_start);
-                // sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                // rank = sjrq2;  
-                // rankInfo.AllRanks.AJG = rank;
-                // rankInfo.ranks.push(rank);
+    //             sjrq2 = ccf.source[url] || "NA";
+    //             rankInfo.AllRanks.CORE_source = sjrq2;
+    //             rankInfo.ranks.push(sjrq2);
 
-                // sjrq2_pos_s = FullRank_Names.indexOf("\13/", position_start);
-                // sjrq2_pos_e = FullRank_Names.indexOf("\14/", position_start);
-                // sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                // rank = sjrq2;  
-                // rankInfo.AllRanks.JCR = rank;
-                // rankInfo.ranks.push(rank);
+    //             sjrq2 = ccf.CORE_c[url] || "NA";
+    //             rankInfo.AllRanks.CORE_Conf = sjrq2;
+    //             rankInfo.ranks.push(sjrq2);
 
-                // sjrq2_pos_s = FullRank_Names.indexOf("\14/", position_start);
-                // sjrq2_pos_e = FullRank_Names.indexOf("\15/", position_start);
-                // sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                // rank = sjrq2;  
-                // rankInfo.AllRanks.SNIP = rank;
-                // rankInfo.ranks.push(rank);
+    //             sjrq2 = ccf.CCF[url] || "NA";
+    //             rankInfo.AllRanks.CCF = sjrq2;
+    //             rankInfo.ranks.push(sjrq2);
 
-                // sjrq2_pos_s = FullRank_Names.indexOf("\15/", position_start);
-                // sjrq2_pos_e = FullRank_Names.indexOf("\16/", position_start);
-                // sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                // rank = sjrq2;  
-                // rankInfo.AllRanks.SJR = rank;
-                // rankInfo.ranks.push(rank);
+    //             sjrq2 = "NA";
+    //             rankInfo.AllRanks.DAEN = sjrq2;
+    //             rankInfo.ranks.push(sjrq2);
 
-                // sjrq2_pos_s = FullRank_Names.indexOf("\16/", position_start);
-                // sjrq2_pos_e = FullRank_Names.indexOf("\17/", position_start);
-                // sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                // rank = sjrq2;  
-                // rankInfo.AllRanks.CiteScore = rank;
-                // rankInfo.ranks.push(rank);
+    //             sjrq2 = ccf.AJG[url] || "NA";
+    //             rankInfo.AllRanks.AJG = sjrq2;
+    //             rankInfo.ranks.push(sjrq2);
 
-                // sjrq2_pos_s = FullRank_Names.indexOf("\17/", position_start);
-                // sjrq2_pos_e = FullRank_Names.indexOf("\18/", position_start);
-                // sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 2), sjrq2_pos_e);
-                // rank = sjrq2;  
-                // rankInfo.AllRanks.ABDC = rank;
-                // rankInfo.ranks.push(rank);
+    //             sjrq2 = ccf.JCR[url] || "NA";
+    //             rankInfo.AllRanks.JCR = sjrq2;
+    //             rankInfo.ranks.push(sjrq2);
 
-                // sjrq2_pos_s = FullRank_Names.indexOf("\18/", position_start);
-                // sjrq2_pos_e = FullRank_Names.indexOf("\19/", position_start);
-                // sjrq2 = FullRank_Names.substring( (sjrq2_pos_s + 3), sjrq2_pos_e);
-                // rank = sjrq2;  
-                // rankInfo.AllRanks.FT50 = rank;
-                // rankInfo.ranks.push(rank);
+    //             sjrq2 = ccf.SNIP[url] || "NA";
+    //             rankInfo.AllRanks.SNIP = sjrq2;
+    //             rankInfo.ranks.push(sjrq2);
+
+    //             sjrq2 = ccf.SJR[url] || "NA";
+    //             rankInfo.AllRanks.SJR = sjrq2;
+    //             rankInfo.ranks.push(sjrq2);
+
+    //             sjrq2 = ccf.CiteSc[url] || "NA";
+    //             rankInfo.AllRanks.CiteScore = sjrq2;
+    //             rankInfo.ranks.push(sjrq2);
+
+    //             sjrq2 = ccf.ABDC[url] || "NA";
+    //             rankInfo.AllRanks.ABDC = sjrq2;
+    //             rankInfo.ranks.push(sjrq2);
+
+    //             sjrq2 = ccf.FT50[url] || "NA";
+    //             rankInfo.AllRanks.FT50 = sjrq2;
+    //             rankInfo.ranks.push(sjrq2);
+
     
-            } else {
+    //         } else {
 
-                rank_txt = "NA";
-                rankInfo.info = "No ranking found for '" + refine + "'";
-                rankInfo.info2 = "";
-            }     
+    //             rank_txt = "NA";
+    //             rankInfo.info = "No ranking found for '" + refine + "'";
+    //             rankInfo.info2 = "";
+    //         }     
   
     if (refine == "" && ISSN1 == "" && (rankInfo.rank_CORE == "NA"  || rankInfo.rank_CORE == undefined) ) {
         rank_txt = "NA";
@@ -638,6 +645,7 @@ getRankSpan = function (refine, type, doi, elid, ISSN1, ISSN2, dblp_venue, dblp_
     let rank = [];
     rank.push(rankInfo.AllRanks.SJR_Q2);
     rank.push(rankInfo.AllRanks.VHB);
+    rank.push(rankInfo.AllRanks.VHB4)
     rank.push(rankInfo.AllRanks.FNEGE);
     rank.push(rankInfo.AllRanks.CoNRS);
     rank.push(rankInfo.AllRanks.HCERE);
@@ -647,6 +655,6 @@ getRankSpan = function (refine, type, doi, elid, ISSN1, ISSN2, dblp_venue, dblp_
     rank.push(rankInfo.AllRanks.DAEN);
     rank.push(rankInfo.AllRanks.AJG);
     rank.push(rankInfo.AllRanks.ABDC);
-    rank.push(rankInfo.AllRanks.FT50);  
+    rank.push(rankInfo.AllRanks.FT50);
     return(rank);      
 };    
