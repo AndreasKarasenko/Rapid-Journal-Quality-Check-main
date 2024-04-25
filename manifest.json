@@ -152,8 +152,13 @@
       "64": "icon/64x64.png"
    },
    "manifest_version": 3,
-   "name": "__MSG_extName__",
+   "name": "Rapid Journal Quality Check",
    "options_ui": {"page": "options.html"},
    "permissions": [ "storage", "activeTab" ],
-   "version": "4.1.2"
+   "version": "1.0",
+   "browser_specific_settings": {
+      "gecko": {
+         "id": "andreas.karasenko@uni-bayreuth.de"
+      }
+   }
 }
