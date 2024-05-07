@@ -1,13 +1,10 @@
 <h1 align="center"><img src="./icon/32x32.png" height="21px" alt=""> RapidJournalQualCheck </h1> 
 <h3 align="center"> Rapid Quality Check for Academic Journals in Google Scholar Search Results </h3>
 </br>
-<p align="center">
-    <a href="https://github.com/JuRaKlWi/RapidJournalQualCheck">
-        <img alt="GitHub manifest version" src="https://img.shields.io/github/manifest-json/v/JuRaKlWi/RapidJournalQualCheck?color=%23EA4AAA&label=Github&logo=github&logoColor=%23EA4AAA">
-    </a>
-</p>
 
 <b> This is a Firefox port of the Chrome extension by [Dr.Wichmann](https://de.linkedin.com/in/julianwichmann) to display SJR along with the H-Index and CCF score next to Google Scholar search results. </b> For the original post see [here](https://de.linkedin.com/posts/julianwichmann_google-scholar-extension-activity-6967463018607611904-nsbm).
+
+Get the extension on [Firefox](https://addons.mozilla.org/de/firefox/addon/rapid-journal-quality-check/).
 
 I made several changes to the lookup and data storage, since firefox does not allow js files larger than 4MB. More information and the change process can be found in the [notes](./notes.md).
 
